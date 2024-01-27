@@ -133,8 +133,20 @@ loader.load("/untitled.glb", (gltf) => {
   console.error(error);
 });
 
-// GLB 파일 로드
-loader.load("/modelglb.glb", (gltf) => {
+// // GLB 파일 로드
+// loader.load("/modelglb.glb", (gltf) => {
+//   // 로드된 모델을 씬에 추가
+//   const model = gltf.scene;
+//   scene.add(model);
+
+//   // 필요한 경우 모델 위치, 크기, 회전 조정
+//   model.position.set(0, 0, 0);
+//   model.scale.set(1, 1, 1);
+// }, undefined, (error) => {
+//   console.error(error);
+// });
+
+loader.load("/test_room.glb", (gltf) => {
   // 로드된 모델을 씬에 추가
   const model = gltf.scene;
   scene.add(model);
@@ -155,12 +167,12 @@ const draggableObjects = [mesh, capsuleMesh, cylinderMesh, torusMesh, shapeMesh,
 const dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
 
 // 드래그 이벤트 리스너 추가 (예시)
-dragControls.addEventListener('dragstart', function (event) {
+dragControls.addEventListener("dragstart", function (event) {
   // 드래그 시작 시 OrbitControls 비활성화
   orbitControls.enabled = false;
 });
 
-dragControls.addEventListener('dragend', function (event) {
+dragControls.addEventListener("dragend", function (event) {
   // 드래그 끝날 때 OrbitControls 다시 활성화
   orbitControls.enabled = true;
 });
