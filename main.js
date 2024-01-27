@@ -120,11 +120,16 @@ scene.add(extrudeMesh);
 
 const loader = new GLTFLoader();
 
+// 드래그하고자 하는 객체들을 배열로 정의
+const draggableObjects = [mesh, capsuleMesh, cylinderMesh, torusMesh, shapeMesh, extrudeMesh];
+
 // GLB 파일 로드
 loader.load("/untitled.glb", (gltf) => {
   // 로드된 모델을 씬에 추가
   const model = gltf.scene;
   scene.add(model);
+
+  draggableObjects.push(model);
 
   // 필요한 경우 모델 위치, 크기, 회전 조정
   model.position.set(3, 3, 0);
@@ -132,19 +137,6 @@ loader.load("/untitled.glb", (gltf) => {
 }, undefined, (error) => {
   console.error(error);
 });
-
-// // GLB 파일 로드
-// loader.load("/modelglb.glb", (gltf) => {
-//   // 로드된 모델을 씬에 추가
-//   const model = gltf.scene;
-//   scene.add(model);
-
-//   // 필요한 경우 모델 위치, 크기, 회전 조정
-//   model.position.set(0, 0, 0);
-//   model.scale.set(1, 1, 1);
-// }, undefined, (error) => {
-//   console.error(error);
-// });
 
 loader.load("/test_room.glb", (gltf) => {
   // 로드된 모델을 씬에 추가
@@ -161,8 +153,6 @@ loader.load("/test_room.glb", (gltf) => {
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 orbitControls.update();
 
-// 드래그하고자 하는 객체들을 배열로 정의
-const draggableObjects = [mesh, capsuleMesh, cylinderMesh, torusMesh, shapeMesh, extrudeMesh];
 // DragControls 인스턴스 생성
 const dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
 
@@ -407,8 +397,8 @@ renderer.render(scene, camera);
 //   renderer.render(scene, camera);
 // }
 
-// window.addEventListener('mousemove', onMouseMove);
-// window.addEventListener('mouseup', onMouseUp);
+// window.addEventListener("mousemove", onMouseMove);
+// window.addEventListener("mouseup", onMouseUp);
 // render();
 
 // // render();
