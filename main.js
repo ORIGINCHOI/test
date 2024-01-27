@@ -138,18 +138,6 @@ loader.load("/untitled.glb", (gltf) => {
   console.error(error);
 });
 
-// loader.load("/test_room.glb", (gltf) => {
-//   // 로드된 모델을 씬에 추가
-//   const model = gltf.scene;
-//   scene.add(model);
-
-//   // 필요한 경우 모델 위치, 크기, 회전 조정
-//   model.position.set(0, 0, 0);
-//   model.scale.set(1, 1, 1);
-// }, undefined, (error) => {
-//   console.error(error);
-// });
-
 loader.load("/wall.glb", (gltf) => {
   // 로드된 모델을 씬에 추가
   const model = gltf.scene;
@@ -168,17 +156,20 @@ orbitControls.update();
 // DragControls 인스턴스 생성
 const dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
 
+let selectedObject = null;
+
 // 드래그 이벤트 리스너 추가 (예시)
 dragControls.addEventListener("dragstart", function (event) {
   // 드래그 시작 시 OrbitControls 비활성화
   orbitControls.enabled = false;
+  selectedObject = event.object;
 });
 
 dragControls.addEventListener("dragend", function (event) {
   // 드래그 끝날 때 OrbitControls 다시 활성화
   orbitControls.enabled = true;
+  selectedObject = null;
 });
-
 
 // 시점 이동 및 키보드 이동 추가?
 // PointerLockControls 인스턴스 생성...
@@ -225,9 +216,6 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
-
-
-
 // 개발자 도구 켰다가 꺼도 리사이즈 해주는 코드
 window.addEventListener("resize", () => {
   // 렌더러 사이즈 화면대로 맞춰주기
@@ -256,6 +244,11 @@ const render = () => {
 
   pointerLock.moveRight(-velocity.x * delta);
   pointerLock.moveForward(-velocity.z * delta);
+
+  if (selectedObject) {
+    // 선택한 물체를 사용자와 함께 이동
+    selectedObject.position.add(new THREE.Vector3(-velocity.x * delta, 0, -velocity.z * delta));
+  }
 
   prevTime = time;
 
