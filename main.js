@@ -1,6 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DragControls } from "three/examples/jsm/controls/DragControls";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
@@ -42,6 +42,10 @@ floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 floor.castShadow = true;
 scene.add(floor);
+
+// AxesHelper : x, y, z 축 추가
+const axesHelper = new THREE.AxesHelper(70);
+scene.add(axesHelper);
 
 // Geometry: Mesh의 골격
 const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -158,22 +162,29 @@ const dragControls = new DragControls(draggableObjects, camera, renderer.domElem
 
 let selectedObject = null;
 
-// 드래그 이벤트 리스너 추가 (예시)
-dragControls.addEventListener("dragstart", function (event) {
+const pointerLock = new PointerLockControls(camera, renderer.domElement);
+
+document.addEventListener("click", () => {
+  pointerLock.lock();
+});
+
+// 드래그 이벤트 리스너 추가...
+dragControls.addEventListener("dragstart", (event) => {
   // 드래그 시작 시 OrbitControls 비활성화
   orbitControls.enabled = false;
   selectedObject = event.object;
+  // pointerLock.unlock();
 });
 
-dragControls.addEventListener("dragend", function (event) {
+dragControls.addEventListener("dragend", (event) => {
   // 드래그 끝날 때 OrbitControls 다시 활성화
   orbitControls.enabled = true;
   selectedObject = null;
+  // pointerLock.lock();
 });
 
 // 시점 이동 및 키보드 이동 추가?
 // PointerLockControls 인스턴스 생성...
-const pointerLock = new PointerLockControls(camera, renderer.domElement);
 let moveForward = false;
 let moveBackward = false;
 let moveLeft = false;
@@ -181,6 +192,12 @@ let moveRight = false;
 let prevTime = performance.now();
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
+
+// 화면 클릭 시 포인터 잠금 모드 활성화
+// document.addEventListener("click", () => {
+//   pointerLock.lock();
+// });
+// pointerLock.lock();
 
 document.addEventListener("keydown", (event) => {
   switch (event.code) {
